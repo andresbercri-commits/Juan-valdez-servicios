@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Juan Valdez | Naturaleza, riesgos y estrategia territorial</title>
+  <style>
+    :root{
+      --wine:#6d1533;
+      --wine-dark:#4e0f24;
+      --coffee:#4b2e22;
+      --cream:#f7f1e8;
+      --paper:#fffdf9;
+      --green:#496b46;
+      --green-2:#6f8d5f;
+      --gold:#b48b4a;
+      --ink:#2d2926;
+      --muted:#726c66;
+      --line:#e7ddd2;
+      --soft:#f1e8dc;
+      --danger:#9a3e3e;
+      --warning:#a36b22;
+      --ok:#3f7250;
+      --shadow:0 14px 36px rgba(77,48,35,.10);
+    }
+
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      font-family:Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color:var(--ink);
+      background:linear-gradient(180deg,#fffdf9 0%,#f8f2ea 100%);
+      line-height:1.55;
+    }
+    a{color:inherit}
+    button{font:inherit}
+    .nav{
+      position:sticky; top:0; z-index:20;
+      backdrop-filter:blur(14px);
+      background:rgba(255,253,249,.92);
+      border-bottom:1px solid var(--line);
+    }
+    .nav-inner{
+      max-width:1180px; margin:auto; padding:12px 20px;
+      display:flex; align-items:center; justify-content:space-between; gap:18px;
+    }
+    .brand{
+      display:flex; align-items:center; gap:12px; font-weight:800; color:var(--wine);
+      white-space:nowrap;
+    }
+    .bean{
+      width:32px; height:42px; border-radius:52% 48% 55% 45%;
+      background:var(--wine);
+      position:relative; transform:rotate(-20deg);
+      box-shadow:inset -5px -3px 0 rgba(255,255,255,.08);
+    }
+    .bean:after{
+      content:""; position:absolute; width:2px; height:31px; background:rgba(255,255,255,.55);
+      left:16px; top:5px; border-radius:4px; transform:rotate(18deg);
+    }
+    .nav-links{
+      display:flex; gap:18px; flex-wrap:wrap; justify-content:flex-end;
+      font-size:14px; color:var(--muted);
+    }
+    .nav-links a{text-decoration:none}
+    .nav-links a:hover{color:var(--wine)}
+
+    main{max-width:1180px; margin:auto; padding:0 20px 70px}
+    .hero{
+      padding:72px 0 42px;
+      display:grid; grid-template-columns:1.25fr .75fr; gap:34px; align-items:center;
+    }
+    .eyebrow{
+      text-transform:uppercase; letter-spacing:.14em; font-weight:800; font-size:12px; color:var(--green);
+    }
+    h1{
+      font-family:Georgia, "Times New Roman", serif;
+      font-size:clamp(42px,6vw,76px); line-height:.98; margin:10px 0 18px;
+      color:var(--wine-dark);
+      max-width:850px;
+    }
+    .hero p{font-size:19px; color:#5e5752; max-width:760px}
+    .hero-panel{
+      border:1px solid var(--line); background:var(--paper); border-radius:24px;
+      box-shadow:var(--shadow); padding:26px;
+    }
+    .hero-panel h3{margin:0 0 8px; color:var(--coffee)}
+    .hero-panel .chain{
+      display:grid; gap:10px; margin-top:18px;
+    }
+    .chain-step{
+      padding:12px 14px; border-radius:14px; background:var(--cream); border:1px solid var(--line);
+      font-size:14px;
+    }
+    .chain-step b{color:var(--wine)}
+
+    .stats{
+      display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin:8px 0 54px;
+    }
+    .stat{
+      border:1px solid var(--line); border-radius:18px; padding:18px; background:var(--paper);
+    }
+    .stat strong{display:block; font-size:28px; color:var(--wine); line-height:1.05}
+    .stat span{display:block; font-size:13px; color:var(--muted); margin-top:7px}
+
+    section{padding:42px 0; scroll-margin-top:85px}
+    .section-head{max-width:790px; margin-bottom:24px}
+    .section-head h2{
+      font-family:Georgia, "Times New Roman", serif;
+      font-size:38px; margin:5px 0 10px; color:var(--coffee)
+    }
+    .section-head p{margin:0; color:var(--muted); font-size:17px}
+    .pill{
+      display:inline-flex; align-items:center; gap:7px;
+      border:1px solid var(--line); border-radius:999px; padding:7px 11px;
+      font-size:12px; font-weight:700; color:var(--green); background:#fbfaf6;
+    }
+
+    .service-toolbar{
+      display:flex; gap:8px; flex-wrap:wrap; margin-bottom:18px;
+    }
+    .filter-btn{
+      border:1px solid var(--line); background:var(--paper); color:var(--coffee);
+      padding:9px 13px; border-radius:999px; cursor:pointer;
+    }
+    .filter-btn.active{background:var(--wine); color:#fff; border-color:var(--wine)}
+    .service-grid{
+      display:grid; grid-template-columns:repeat(3,1fr); gap:15px;
+    }
+    .service-card{
+      border:1px solid var(--line); background:var(--paper); border-radius:18px; padding:19px;
+      transition:.2s ease; min-height:210px;
+    }
+    .service-card:hover{transform:translateY(-2px); box-shadow:var(--shadow)}
+    .service-card .tag{font-size:11px; font-weight:800; color:var(--green); text-transform:uppercase; letter-spacing:.08em}
+    .service-card h3{margin:8px 0 8px; font-size:20px; color:var(--wine)}
+    .service-card p{font-size:14px; color:var(--muted); margin:0}
+    .service-card .relation{
+      margin-top:13px; padding-top:13px; border-top:1px dashed var(--line);
+      font-size:13px; color:var(--ink)
+    }
+
+    .split{
+      display:grid; grid-template-columns:1fr 1fr; gap:18px;
+    }
+    .panel{
+      border:1px solid var(--line); background:var(--paper); border-radius:20px; padding:22px;
+    }
+    .panel h3{margin:0 0 12px; color:var(--wine)}
+    .impact-list{display:grid; gap:10px}
+    .impact{
+      display:grid; grid-template-columns:44px 1fr; gap:12px; align-items:start;
+      padding:12px; border-radius:14px; background:var(--cream);
+    }
+    .icon{
+      width:40px; height:40px; border-radius:12px; display:grid; place-items:center;
+      font-weight:900; background:#fff; color:var(--wine); border:1px solid var(--line)
+    }
+    .impact b{display:block; margin-bottom:2px}
+    .impact span{font-size:13px; color:var(--muted)}
+
+    .emissions{
+      display:grid; gap:14px;
+    }
+    .bar-row{display:grid; gap:6px}
+    .bar-label{display:flex; justify-content:space-between; gap:12px; font-size:13px}
+    .bar{
+      height:12px; background:#eadfd3; border-radius:999px; overflow:hidden;
+    }
+    .bar > span{display:block; height:100%; border-radius:999px; background:var(--wine)}
+    .note{
+      font-size:12px; color:var(--muted); margin-top:8px;
+    }
+
+    .risk-tabs{display:flex; gap:8px; flex-wrap:wrap; margin-bottom:16px}
+    .risk-btn{
+      border:1px solid var(--line); border-radius:12px; padding:10px 14px;
+      background:var(--paper); cursor:pointer; font-weight:700;
+    }
+    .risk-btn.active{background:var(--coffee); color:#fff; border-color:var(--coffee)}
+    .risk-detail{
+      border:1px solid var(--line); background:var(--paper); border-radius:20px; padding:22px;
+      display:grid; grid-template-columns:1fr 1fr; gap:18px;
+    }
+    .risk-block h4{margin:0 0 6px; color:var(--wine)}
+    .risk-block p{margin:0; color:var(--muted)}
+
+    .strategy-grid{
+      display:grid; grid-template-columns:repeat(3,1fr); gap:16px;
+    }
+    .strategy-card{
+      border:1px solid var(--line); background:var(--paper); border-radius:20px; padding:20px;
+      cursor:pointer; transition:.2s ease; position:relative;
+    }
+    .strategy-card:hover{transform:translateY(-2px); box-shadow:var(--shadow)}
+    .strategy-card h3{margin:10px 0 6px; color:var(--wine)}
+    .strategy-card p{font-size:14px; color:var(--muted); margin:0}
+    .strategy-card .more{
+      max-height:0; overflow:hidden; transition:max-height .3s ease; font-size:13px; color:var(--ink)
+    }
+    .strategy-card.open .more{max-height:240px; margin-top:12px}
+    .strategy-card .mini{font-size:11px; font-weight:800; text-transform:uppercase; letter-spacing:.08em; color:var(--green)}
+
+    .psa-flow{
+      display:grid; grid-template-columns:repeat(5,1fr); gap:10px; margin:18px 0;
+    }
+    .psa-step{
+      border:1px solid var(--line); border-radius:16px; padding:15px; background:var(--paper);
+      cursor:pointer; min-height:115px;
+    }
+    .psa-step.active{outline:2px solid var(--green); background:#f5f8f2}
+    .psa-step b{display:block; color:var(--wine); margin-bottom:5px}
+    .psa-step span{font-size:12px; color:var(--muted)}
+    .psa-detail{
+      border-left:4px solid var(--green); background:#f4f7f1; padding:16px 18px; border-radius:10px;
+      color:#495348;
+    }
+
+    .psa-table{
+      width:100%; border-collapse:collapse; margin-top:20px; font-size:14px;
+    }
+    .psa-table th,.psa-table td{padding:12px 10px; border-bottom:1px solid var(--line); text-align:left; vertical-align:top}
+    .psa-table th{color:var(--wine); width:23%}
+
+    .targets{
+      display:grid; grid-template-columns:repeat(4,1fr); gap:14px;
+    }
+    .target{
+      border:1px solid var(--line); background:var(--paper); border-radius:18px; padding:18px;
+    }
+    .target strong{display:block; font-size:28px; color:var(--wine)}
+    .target span{font-size:13px; color:var(--muted)}
+    .target small{display:block; color:#8a837d; margin-top:8px}
+
+    .current-vs-proposed{
+      display:grid; grid-template-columns:1fr 1fr; gap:16px;
+    }
+    .current-vs-proposed .panel ul{padding-left:20px; margin:10px 0 0}
+    .current-vs-proposed .panel li{margin:8px 0; color:var(--muted)}
+    .current-vs-proposed .existing{border-top:5px solid var(--gold)}
+    .current-vs-proposed .proposal{border-top:5px solid var(--green)}
+
+    details{
+      border:1px solid var(--line); border-radius:14px; padding:12px 15px;
+      background:var(--paper); margin-bottom:8px;
+    }
+    summary{cursor:pointer; font-weight:700; color:var(--coffee)}
+    .sources p{font-size:13px; color:var(--muted)}
+    footer{
+      margin-top:50px; padding-top:25px; border-top:1px solid var(--line);
+      color:var(--muted); font-size:13px;
+    }
+
+    @media (max-width:900px){
+      .hero{grid-template-columns:1fr}
+      .stats,.targets{grid-template-columns:repeat(2,1fr)}
+      .service-grid,.strategy-grid{grid-template-columns:1fr 1fr}
+      .psa-flow{grid-template-columns:1fr 1fr}
+      .split,.risk-detail,.current-vs-proposed{grid-template-columns:1fr}
+    }
+    @media (max-width:620px){
+      .nav-links{display:none}
+      main{padding:0 14px 55px}
+      .hero{padding-top:44px}
+      .stats,.targets,.service-grid,.strategy-grid,.psa-flow{grid-template-columns:1fr}
+      .section-head h2{font-size:31px}
+      .stat strong,.target strong{font-size:24px}
+    }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="nav-inner">
+      <div class="brand"><span class="bean" aria-hidden="true"></span><span>Juan Valdez · Naturaleza y estrategia</span></div>
+      <div class="nav-links">
+        <a href="#capital">Capital natural</a>
+        <a href="#impactos">Impactos</a>
+        <a href="#riesgos">Riesgos</a>
+        <a href="#sbn">SbN</a>
+        <a href="#psa">PSA</a>
+        <a href="#metas">Metas</a>
+      </div>
+    </div>
+  </nav>
+
+  <main>
+    <header class="hero">
+      <div>
+        <div class="eyebrow">Análisis y estrategia de gestión</div>
+        <h1>El café depende de la naturaleza.</h1>
+        <p>
+          La cadena de Juan Valdez depende de agua, suelo, biodiversidad y clima. El reto es mantener esos
+          servicios ecosistémicos mientras se reducen los impactos ambientales y se fortalece la resiliencia de
+          las familias cafeteras del Cauca.
+        </p>
+      </div>
+      <aside class="hero-panel" aria-label="Cadena conceptual">
+        <h3>La lógica del análisis</h3>
+        <div class="chain">
+          <div class="chain-step"><b>Capital natural</b> · agua, suelo, vegetación, biodiversidad y clima.</div>
+          <div class="chain-step"><b>Servicios ecosistémicos</b> · agua dulce, regulación hídrica, polinización, control de erosión y microclima.</div>
+          <div class="chain-step"><b>Cadena de valor</b> · familias cafeteras → café → Procafecol/Juan Valdez.</div>
+          <div class="chain-step"><b>Estrategia territorial</b> · SbN + PSA + trazabilidad + adaptación climática.</div>
+        </div>
+      </aside>
+    </header>
+
+    <div class="stats" aria-label="Datos clave">
+      <div class="stat"><strong>93.000+</strong><span>familias cafeteras en Cauca.</span></div>
+      <div class="stat"><strong>94.500 ha</strong><span>aprox. dedicadas al cultivo de café en Cauca.</span></div>
+      <div class="stat"><strong>11,7%</strong><span>del café adquirido en 2024 provino de programas de impacto.</span></div>
+      <div class="stat"><strong>95%</strong><span>aprox. de la huella de carbono corresponde a alcance 3.</span></div>
+    </div>
+
+    <section id="capital">
+      <div class="section-head">
+        <span class="pill">01 · Base natural de la cadena</span>
+        <h2>Capital natural y servicios ecosistémicos</h2>
+        <p>
+          El capital natural es el “stock” ecológico que sostiene la producción. Los servicios ecosistémicos son
+          los beneficios que ese stock genera para las personas y para la actividad cafetera.
+        </p>
+      </div>
+
+      <div class="service-toolbar" role="group" aria-label="Filtrar servicios">
+        <button class="filter-btn active" data-filter="all" type="button">Todos</button>
+        <button class="filter-btn" data-filter="aprovisionamiento" type="button">Aprovisionamiento</button>
+        <button class="filter-btn" data-filter="regulacion" type="button">Regulación</button>
+        <button class="filter-btn" data-filter="cultural" type="button">Cultural</button>
+      </div>
+
+      <div class="service-grid" id="serviceGrid">
+        <article class="service-card" data-category="aprovisionamiento">
+          <div class="tag">Aprovisionamiento</div>
+          <h3>Provisión de café</h3>
+          <p>Suelo, agua, nutrientes y condiciones climáticas permiten producir la principal materia prima de la cadena.</p>
+          <div class="relation"><b>Para Juan Valdez:</b> disponibilidad y calidad del grano.</div>
+        </article>
+        <article class="service-card" data-category="aprovisionamiento">
+          <div class="tag">Aprovisionamiento</div>
+          <h3>Agua dulce</h3>
+          <p>La captación, infiltración y almacenamiento de agua en suelos y cuencas sostienen el cultivo y el procesamiento.</p>
+          <div class="relation"><b>Para Juan Valdez:</b> continuidad productiva y calidad del café.</div>
+        </article>
+        <article class="service-card" data-category="regulacion">
+          <div class="tag">Regulación</div>
+          <h3>Regulación microclimática</h3>
+          <p>La cobertura arbórea modera temperatura, radiación y humedad en los cafetales.</p>
+          <div class="relation"><b>Para Juan Valdez:</b> menor vulnerabilidad a condiciones climáticas adversas.</div>
+        </article>
+        <article class="service-card" data-category="regulacion">
+          <div class="tag">Regulación</div>
+          <h3>Regulación hídrica</h3>
+          <p>La vegetación y el suelo reducen escorrentía, retienen humedad y ayudan a moderar lluvias intensas y periodos secos.</p>
+          <div class="relation"><b>Para Juan Valdez:</b> estabilidad del abastecimiento de agua.</div>
+        </article>
+        <article class="service-card" data-category="regulacion">
+          <div class="tag">Regulación</div>
+          <h3>Control de erosión</h3>
+          <p>Raíces, cobertura vegetal y materia orgánica protegen el suelo fértil, especialmente en laderas.</p>
+          <div class="relation"><b>Para Juan Valdez:</b> protección de la productividad de las fincas.</div>
+        </article>
+        <article class="service-card" data-category="regulacion">
+          <div class="tag">Regulación</div>
+          <h3>Polinización</h3>
+          <p>Los polinizadores contribuyen al funcionamiento del agroecosistema y a la reproducción de plantas.</p>
+          <div class="relation"><b>Para Juan Valdez:</b> soporte ecológico a la producción.</div>
+        </article>
+        <article class="service-card" data-category="cultural">
+          <div class="tag">Cultural</div>
+          <h3>Identidad cafetera</h3>
+          <p>El cultivo del café forma parte de prácticas, conocimientos y relaciones históricas entre comunidades y territorio.</p>
+          <div class="relation"><b>Para Juan Valdez:</b> vínculo entre origen, territorio y reconocimiento del café colombiano.</div>
+        </article>
+      </div>
+    </section>
+
+    <section id="impactos">
+      <div class="section-head">
+        <span class="pill">02 · Dependencias e impactos</span>
+        <h2>¿Dónde presiona la cadena a la naturaleza?</h2>
+        <p>
+          Los impactos más relevantes aparecen tanto en las fincas proveedoras como en operaciones de Procafecol.
+          El reto no es solo “usar naturaleza”, sino evitar que ese uso deteriore la base productiva.
+        </p>
+      </div>
+
+      <div class="split">
+        <div class="panel">
+          <h3>Principales presiones</h3>
+          <div class="impact-list">
+            <div class="impact"><div class="icon">S</div><div><b>Uso del suelo y erosión</b><span>Pérdida de cobertura vegetal, prácticas inadecuadas y agroquímicos pueden degradar el suelo y reducir productividad.</span></div></div>
+            <div class="impact"><div class="icon">A</div><div><b>Consumo y contaminación del agua</b><span>El beneficio del café puede generar “aguas mieles”; un manejo inadecuado afecta quebradas y ríos.</span></div></div>
+            <div class="impact"><div class="icon">Q</div><div><b>Agroquímicos y residuos</b><span>Fertilizantes, productos químicos y residuos pueden afectar suelo, agua y organismos del agroecosistema.</span></div></div>
+            <div class="impact"><div class="icon">CO₂</div><div><b>Emisiones de GEI</b><span>Las emisiones se generan en operaciones directas, energía, transporte, insumos y proveedores.</span></div></div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <h3>Datos operativos reportados</h3>
+          <div class="emissions">
+            <div class="bar-row">
+              <div class="bar-label"><span>Alcance 1 (2025)</span><b>693 t CO₂e</b></div>
+              <div class="bar"><span style="width:12%"></span></div>
+            </div>
+            <div class="bar-row">
+              <div class="bar-label"><span>Alcance 2 (2025)</span><b>1.177 t CO₂e</b></div>
+              <div class="bar"><span style="width:20%"></span></div>
+            </div>
+            <div class="bar-row">
+              <div class="bar-label"><span>Alcance 3 (2024)</span><b>57.395 t CO₂e</b></div>
+              <div class="bar"><span style="width:100%"></span></div>
+            </div>
+          </div>
+          <p class="note">Los periodos de reporte son diferentes: alcance 1 y 2 corresponden a 2025; alcance 3 se reporta para 2024.</p>
+          <hr style="border:0;border-top:1px solid var(--line);margin:18px 0">
+          <div class="impact-list">
+            <div class="impact"><div class="icon">100%</div><div><b>Residuos orgánicos gestionados</b><span>141 toneladas generadas en planta durante 2025.</span></div></div>
+            <div class="impact"><div class="icon">97%</div><div><b>Menos residuos peligrosos</b><span>Reducción frente a 2024.</span></div></div>
+            <div class="impact"><div class="icon">57</div><div><b>Establecimientos con biotratamiento</b><span>Además, el 100 % de tiendas contaba con trampas de grasa en 2025.</span></div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="riesgos">
+      <div class="section-head">
+        <span class="pill">03 · Marco TNFD / LEAP</span>
+        <h2>Riesgos y oportunidades</h2>
+        <p>Selecciona un tipo de riesgo para ver cómo puede afectar la cadena de Juan Valdez y qué respuesta propone el análisis.</p>
+      </div>
+
+      <div class="risk-tabs">
+        <button class="risk-btn active" data-risk="fisico" type="button">Físico</button>
+        <button class="risk-btn" data-risk="transicion" type="button">Transición</button>
+        <button class="risk-btn" data-risk="sistemico" type="button">Sistémico</button>
+      </div>
+      <div class="risk-detail" id="riskDetail" aria-live="polite"></div>
+    </section>
+
+    <section id="sbn">
+      <div class="section-head">
+        <span class="pill">04 · Línea 1</span>
+        <h2>Soluciones Basadas en la Naturaleza</h2>
+        <p>
+          La estrategia es territorial porque los riesgos de agua, suelo, biodiversidad y clima se originan principalmente en
+          los territorios cafeteros. Haz clic en cada intervención para ver qué riesgo atiende.
+        </p>
+      </div>
+
+      <div class="current-vs-proposed" style="margin-bottom:18px">
+        <div class="panel existing">
+          <h3>Lo que ya existe</h3>
+          <ul>
+            <li>Programas de impacto como Mujeres Cafeteras, Jóvenes Renacer, Plan Amigo Caficultor y Trazando la Ruta del Café.</li>
+            <li>En 2024, 11,7 % del café adquirido provino de programas de impacto.</li>
+            <li>Restauración previa en Valle del Cauca, incluida siembra de árboles y recuperación mediante cercas vivas y enriquecimiento de bosque.</li>
+          </ul>
+        </div>
+        <div class="panel proposal">
+          <h3>Lo que propone el grupo</h3>
+          <ul>
+            <li>Escalar acciones a territorios cafeteros del Cauca.</li>
+            <li>Vincular conservación con adaptación climática y resiliencia de la cadena.</li>
+            <li>Combinar SbN con incentivos económicos mediante un esquema de PSA.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="strategy-grid">
+        <article class="strategy-card" tabindex="0">
+          <div class="mini">SbN 01</div>
+          <h3>Café bajo sombra</h3>
+          <p>Árboles nativos dentro del cultivo para combinar producción y cobertura vegetal.</p>
+          <div class="more"><b>Riesgos que atiende:</b> aumento de temperatura, pérdida de biodiversidad, menor humedad del suelo y variabilidad climática. <br><br><b>Beneficios:</b> microclima, hábitat, captura de carbono y protección del suelo.</div>
+        </article>
+        <article class="strategy-card" tabindex="0">
+          <div class="mini">SbN 02</div>
+          <h3>Rondas de quebradas</h3>
+          <p>Recuperar vegetación nativa alrededor de quebradas y nacimientos.</p>
+          <div class="more"><b>Riesgos que atiende:</b> erosión de orillas, sedimentación y deterioro de calidad y disponibilidad de agua. <br><br><b>Beneficios:</b> regulación hídrica y conectividad ecológica.</div>
+        </article>
+        <article class="strategy-card" tabindex="0">
+          <div class="mini">SbN 03</div>
+          <h3>Conservación de suelos</h3>
+          <p>Coberturas vegetales, barreras vivas y siembra en fajas en terrenos inclinados.</p>
+          <div class="more"><b>Riesgos que atiende:</b> erosión, pérdida de fertilidad, escorrentía y deslizamientos. <br><br><b>Beneficios:</b> menor impacto de lluvia, mejor infiltración y protección de suelo y agua.</div>
+        </article>
+      </div>
+    </section>
+
+    <section id="psa">
+      <div class="section-head">
+        <span class="pill">05 · Línea 2</span>
+        <h2>Pago por Servicios Ambientales</h2>
+        <p>
+          El PSA propuesto busca reconocer a familias cafeteras y comunidades que conserven o restauren ecosistemas
+          estratégicos. No es “pagar por no producir”: es reconocer el valor de mantener los servicios que sostienen la cadena.
+        </p>
+      </div>
+
+      <div class="psa-flow" id="psaFlow">
+        <button class="psa-step active" data-step="0" type="button"><b>1. Priorizar</b><span>Fincas, microcuencas, nacimientos y fragmentos de bosque.</span></button>
+        <button class="psa-step" data-step="1" type="button"><b>2. Concertar</b><span>Trabajar con familias, asociaciones y organizaciones comunitarias.</span></button>
+        <button class="psa-step" data-step="2" type="button"><b>3. Acordar</b><span>Definir áreas, acciones, incentivo y verificación.</span></button>
+        <button class="psa-step" data-step="3" type="button"><b>4. Implementar</b><span>Restauración, protección de agua, bosque y suelos.</span></button>
+        <button class="psa-step" data-step="4" type="button"><b>5. Monitorear</b><span>Medir cumplimiento y resultados ambientales.</span></button>
+      </div>
+      <div class="psa-detail" id="psaDetail" aria-live="polite">
+        Priorizar zonas donde la conservación tenga mayor impacto: nacimientos de agua, rondas de quebradas, fragmentos de bosque y áreas que conecten ecosistemas.
+      </div>
+
+      <table class="psa-table">
+        <tr><th>Modalidad</th><td>Regulación y calidad hídrica + conservación de biodiversidad.</td></tr>
+        <tr><th>Beneficiarios</th><td>Familias caficultoras, asociaciones de productores y comunidades en áreas prioritarias.</td></tr>
+        <tr><th>Acciones</th><td>Proteger nacimientos, restaurar rondas, conservar bosque, mantener coberturas naturales y aplicar prácticas de conservación del suelo.</td></tr>
+        <tr><th>Incentivo</th><td>Pago económico o apoyo en especie: árboles nativos, asistencia técnica, materiales para restauración o insumos.</td></tr>
+        <tr><th>Cofinanciación</th><td>Juan Valdez + cooperativas + autoridades ambientales + entidades territoriales u otros aliados.</td></tr>
+        <tr><th>Acuerdo</th><td>Voluntario y condicionado al cumplimiento de las acciones de conservación.</td></tr>
+      </table>
+    </section>
+
+    <section id="metas">
+      <div class="section-head">
+        <span class="pill">06 · Seguimiento</span>
+        <h2>Metas e indicadores</h2>
+        <p>La estrategia combina compromisos climáticos ya existentes con indicadores propuestos para naturaleza y territorio.</p>
+      </div>
+
+      <div class="targets">
+        <div class="target"><strong>−42%</strong><span>Emisiones de alcance 1 y 2 para 2030.</span><small>Meta corporativa reportada.</small></div>
+        <div class="target"><strong>−25%</strong><span>Emisiones de alcance 3 para 2030.</span><small>Meta corporativa reportada.</small></div>
+        <div class="target"><strong>2050</strong><span>Cero emisiones netas.</span><small>Compromiso climático corporativo.</small></div>
+        <div class="target"><strong>+</strong><span>Indicadores de naturaleza.</span><small>Propuesta: fincas sostenibles, agua, cobertura vegetal y seguimiento a proveedores.</small></div>
+      </div>
+
+      <div class="panel" style="margin-top:18px">
+        <h3>Indicadores territoriales sugeridos</h3>
+        <div class="impact-list">
+          <div class="impact"><div class="icon">ha</div><div><b>Hectáreas conservadas y restauradas</b><span>Permite seguir el alcance territorial de SbN y PSA.</span></div></div>
+          <div class="impact"><div class="icon">H₂O</div><div><b>Calidad y disponibilidad de agua</b><span>Indicador directo para regulación hídrica y resiliencia productiva.</span></div></div>
+          <div class="impact"><div class="icon">🌱</div><div><b>Supervivencia de árboles nativos / cobertura vegetal</b><span>Mide permanencia y calidad de la restauración.</span></div></div>
+          <div class="impact"><div class="icon">👥</div><div><b>Familias y fincas vinculadas</b><span>Permite medir alcance social y adopción de prácticas sostenibles.</span></div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="sources" id="fuentes">
+      <div class="section-head">
+        <span class="pill">Fuentes</span>
+        <h2>Base del análisis</h2>
+        <p>La página resume exclusivamente contenido relacionado con Juan Valdez y el análisis territorial del grupo.</p>
+      </div>
+
+      <details open>
+        <summary>Fuentes principales</summary>
+        <p>Juan Valdez Café / Procafecol S.A. (2025–2026), Informes de Sostenibilidad 2024 y 2025.</p>
+        <p>Comité de Cafeteros del Cauca, información sobre café de Cauca.</p>
+        <p>Gómez-Baggethun & de Groot (2007), capital natural y funciones de los ecosistemas.</p>
+        <p>Dasgupta (2021), The Economics of Biodiversity.</p>
+      </details>
+      <details>
+        <summary>Soluciones basadas en la naturaleza</summary>
+        <p>Cohen-Shacham et al. (2016), IUCN Nature-based Solutions.</p>
+        <p>Cenicafé: conservación de suelos y aguas; manejo de sombrío; sistemas agroforestales.</p>
+        <p>De Leijster et al. (2021), servicios ecosistémicos en agroforestería cafetera colombiana.</p>
+      </details>
+      <details>
+        <summary>Gestión de riesgos y política climática</summary>
+        <p>TNFD (2023), recomendaciones y enfoque LEAP.</p>
+        <p>Universidad de Los Andes (2026), Estrategia colombiana de cambio climático.</p>
+        <p>Decreto 1007 de 2018 y Programa Nacional de Pago por Servicios Ambientales.</p>
+      </details>
+    </section>
+
+    <footer>
+      Proyecto académico · Servicios Ecosistémicos · Análisis de Juan Valdez / Procafecol con foco territorial en Cauca.
+    </footer>
+  </main>
+
+  <script>
+    (() => {
+      const filterButtons = [...document.querySelectorAll('.filter-btn')];
+      const serviceCards = [...document.querySelectorAll('.service-card')];
+      filterButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+          const f = btn.dataset.filter;
+          filterButtons.forEach(b => b.classList.toggle('active', b === btn));
+          serviceCards.forEach(card => {
+            card.style.display = (f === 'all' || card.dataset.category === f) ? '' : 'none';
+          });
+        });
+      });
+
+      const riskData = {
+        fisico: {
+          leftTitle:'Riesgo para Juan Valdez',
+          left:'Erosión del suelo, pérdida de cobertura vegetal, sequías y cambios en los patrones de lluvia pueden disminuir la productividad y afectar disponibilidad y calidad del café.',
+          rightTitle:'Oportunidad',
+          right:'Promover sistemas agroforestales con árboles de sombra, conservación del suelo y uso eficiente del agua, acompañados de asistencia técnica.'
+        },
+        transicion: {
+          leftTitle:'Riesgo para Juan Valdez',
+          left:'Nuevas exigencias ambientales, expectativas de consumidores y necesidad de demostrar origen sostenible pueden generar costos de adaptación y riesgo reputacional.',
+          rightTitle:'Oportunidad',
+          right:'Fortalecer trazabilidad, establecer criterios ambientales para proveedores y ofrecer incentivos y capacitación para adoptar prácticas sostenibles.'
+        },
+        sistemico: {
+          leftTitle:'Riesgo para Juan Valdez',
+          left:'La combinación de deterioro ambiental, conflictos territoriales, inseguridad y dificultades económicas de familias cafeteras puede debilitar la producción regional y el abastecimiento.',
+          rightTitle:'Oportunidad',
+          right:'Crear alianzas con cooperativas, comunidades y autoridades para fortalecer gobernanza territorial, apoyo al productor y conservación de ecosistemas.'
+        }
+      };
+
+      const riskButtons = [...document.querySelectorAll('.risk-btn')];
+      const riskDetail = document.getElementById('riskDetail');
+      function renderRisk(key){
+        const d = riskData[key];
+        riskDetail.innerHTML = `
+          <div class="risk-block"><h4>${d.leftTitle}</h4><p>${d.left}</p></div>
+          <div class="risk-block"><h4>${d.rightTitle}</h4><p>${d.right}</p></div>
+        `;
+      }
+      renderRisk('fisico');
+      riskButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+          riskButtons.forEach(b => b.classList.toggle('active', b === btn));
+          renderRisk(btn.dataset.risk);
+        });
+      });
+
+      const strategyCards = [...document.querySelectorAll('.strategy-card')];
+      strategyCards.forEach(card => {
+        const toggle = () => card.classList.toggle('open');
+        card.addEventListener('click', toggle);
+        card.addEventListener('keydown', e => {
+          if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(); }
+        });
+      });
+
+      const psaCopy = [
+        'Priorizar zonas donde la conservación tenga mayor impacto: nacimientos de agua, rondas de quebradas, fragmentos de bosque y áreas que conecten ecosistemas.',
+        'Construir el esquema con las personas que viven y producen en el territorio. La concertación define necesidades, acciones posibles y legitimidad del acuerdo.',
+        'Definir hectáreas, prácticas, incentivo y verificación. El incentivo se mantiene si se cumplen las acciones de conservación acordadas.',
+        'Llevar las acciones al campo: restaurar rondas, proteger nacimientos, conservar bosque, sembrar especies nativas y mejorar coberturas y manejo del suelo.',
+        'Verificar cumplimiento y resultados: hectáreas conservadas, calidad del agua, supervivencia de árboles, cobertura vegetal y familias vinculadas.'
+      ];
+      const psaSteps = [...document.querySelectorAll('.psa-step')];
+      const psaDetail = document.getElementById('psaDetail');
+      psaSteps.forEach(step => {
+        step.addEventListener('click', () => {
+          psaSteps.forEach(s => s.classList.toggle('active', s === step));
+          psaDetail.textContent = psaCopy[Number(step.dataset.step)];
+        });
+      });
+    })();
+  </script>
+</body>
+</html>
